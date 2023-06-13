@@ -1,11 +1,11 @@
 import os
 
-import openai
 from dotenv import load_dotenv, find_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 
-_ = load_dotenv(find_dotenv())  # read local .env file
+# read local .env file
+_ = load_dotenv(find_dotenv())
 gpt_api_key = os.environ['API2D_API_KEY']
 
 # chatGPT
@@ -16,11 +16,6 @@ chat = ChatOpenAI(
     openai_api_key=gpt_api_key,
     openai_api_base='https://openai.api2d.net/v1'
 )
-
-# 用户的商品评价
-customer_review = """
-苹果垃圾桶工作站
-"""
 
 # Prompt 编写
 review_template = """\
@@ -44,6 +39,12 @@ type
 
 # 创建 ChatPromptTemplate
 prompt_template = ChatPromptTemplate.from_template(review_template)
+
+# 用户的商品评价
+customer_review = """
+苹果垃圾桶工作站
+"""
+
 messages = prompt_template.format_messages(text=customer_review)
 
 # 请求
