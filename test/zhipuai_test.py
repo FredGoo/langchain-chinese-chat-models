@@ -8,7 +8,6 @@ from langchain.prompts import ChatPromptTemplate
 _ = load_dotenv(find_dotenv())
 gpt_api_key = os.environ['ZHIPUAI_API_KEY']
 
-# chatGPT
 chat = ChatZhiPu(
     temperature=0.0,
     model_name="chatglm_130b",
