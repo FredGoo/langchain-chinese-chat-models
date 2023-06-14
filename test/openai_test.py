@@ -24,8 +24,8 @@ review_template = """\
 gift: is this a gift for someone？if yes set True，or False
 delivery_days: 花了几天收到了礼物？输出一个数字，如果没有这个信息，输出-1
 price_value: 获取这个物品的价格或者价值，如果有多个，用逗号分隔组成一个python数组
-cpu: discribe the cpu model
-type: discribe the type of product
+cpu: describe the cpu model
+type: describe the type of product
 
 用以下的键值来格式化信息并输出一个JSON:
 gift
@@ -42,7 +42,7 @@ prompt_template = ChatPromptTemplate.from_template(review_template)
 
 # 用户的商品评价
 customer_review = """
-苹果垃圾桶工作站
+使用了一个多月，大家评价好的部份我就不说了，原计划想买个ipadpro12.9，加上键盘也得一万二三(macbook入手1.4万多一点)，后做了大量功课，确定macbook14，只能说ipadpro能干的它能做，ipad不能干的它也能干，做为娱乐中心幸福感满满！速度，画质，音质，功能接口杠杠滴！
 """
 
 messages = prompt_template.format_messages(text=customer_review)
