@@ -170,7 +170,7 @@ class ChatXfyun(BaseChatModel):
     """Timeout for requests to OpenAI completion API. Default is 600 seconds."""
     max_retries: int = 6
     """Maximum number of retries to make when generating."""
-    streaming: bool = True
+    streaming: bool = False
     """Whether to stream the results or not."""
     n: int = 1
     """Number of chat completions to generate for each prompt."""
@@ -319,7 +319,11 @@ class ChatXfyun(BaseChatModel):
         # 此处打印出建立连接时候的url,参考本demo的时候可取消上方打印的注释，比对相同参数时生成的url与自己代码生成的url是否一致
         return url
 
+    content = ""
+    ws_status = 1
+
     def completion_with_retry(self, **kwargs: Any) -> Any:
+
         """Use tenacity to retry the completion call."""
         retry_decorator = self._create_retry_decorator()
 
@@ -364,9 +368,10 @@ class ChatXfyun(BaseChatModel):
             else:
                 choices = data["payload"]["choices"]
                 status = choices["status"]
-                content = choices["text"][0]["content"]
-                print(content, end='')
+                self.content += choices["text"][0]["content"]
                 if status == 2:
+                    print(self.content, end='')
+                    self.ws_status = 2
                     ws.close()
 
         @retry_decorator
@@ -378,7 +383,9 @@ class ChatXfyun(BaseChatModel):
             ws.messages = kwargs
             ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
 
-            return
+            while self.ws_status == 1:
+                continue
+            return self.content
 
         return _completion_with_retry(**kwargs)
 
